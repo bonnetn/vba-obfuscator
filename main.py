@@ -24,9 +24,8 @@ def get_random_variable_name(size: int) -> str:
 def replace_var_name(content: str, var_name: str, new_name: str) -> str:
     var_name = re.escape(var_name)
     new_name = re.escape(new_name)
-    pattern = r"(\s){}(\s)".format(var_name)
-    repl = r"\g<1>{}\g<2>".format(new_name)  #  Use g<#> here because new_name can begin with a digit.
-    result = re.sub(pattern, repl, content)
+    pattern = r"\b{}\b".format(var_name)
+    result = re.sub(pattern, new_name, content)
     return result
 
 
