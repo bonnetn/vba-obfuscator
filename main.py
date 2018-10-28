@@ -37,8 +37,18 @@ def replace_var_name(content: str, var_name: str, new_name: str) -> str:
 
 if __name__ == "__main__":
     vba_content = read_file(VBA_PATH)
+
+    print("Replacing variable names...")
     for var in get_all_variables_iter(vba_content):
         var_length = 7 + secrets.randbelow(16)
-        vba_content = replace_var_name(vba_content, var, get_random_variable_name(var_length))
+        new_name = get_random_variable_name(var_length)
+        vba_content = replace_var_name(vba_content, var, new_name)
+        print("- Replace '{}' with '{}'.".format(var, new_name))
 
+    print("Obfuscating strings.")
+
+    for str_found in get_all_strings_iter(vba_content):
+        print("String found: {}".format(str_found))
+
+    print("=" * 100)
     print(replace_var_name(vba_content, "exec", "test"))
