@@ -24,9 +24,8 @@ def get_random_variable_name(size: int) -> str:
 def replace_var_name(content: str, var_name: str, new_name: str) -> str:
     var_name = re.escape(var_name)
     new_name = re.escape(new_name)
-    # We have to use named groups here. If we had use \1 and \2, numbers in var_name could mess the regex.
-    pattern = r"(?P<prefix>\s){}(?P<suffix>\s)".format(var_name)
-    repl = r"\g<prefix>{}\g<suffix>".format(new_name)
+    pattern = r"(\s){}(\s)".format(var_name)
+    repl = r"\g<1>{}\g<2>".format(new_name)  #  Use g<#> here because new_name can begin with a digit.
     result = re.sub(pattern, repl, content)
     return result
 
