@@ -3,7 +3,7 @@ import secrets
 import string
 from typing import Iterable
 
-VBA_PATH = "download_payload.vba"
+VBA_PATH = "example_macro/download_payload.vba"
 FIND_VAR_NAMES_REGEX = r"\s*Dim (\w+) "
 
 
