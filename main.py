@@ -22,7 +22,12 @@ def get_random_variable_name(size: int) -> str:
 
 
 def replace_var_name(content: str, var_name: str, new_name: str) -> str:
-    result = re.sub(r"(\s){}(\s)".format(var_name), r"\1{}\2".format(new_name), content)
+    var_name = re.escape(var_name)
+    new_name = re.escape(new_name)
+    # We have to use named groups here. If we had use \1 and \2, numbers in var_name could mess the regex.
+    pattern = r"(?P<prefix>\s){}(?P<suffix>\s)".format(var_name)
+    repl = r"\g<prefix>{}\g<suffix>".format(new_name)
+    result = re.sub(pattern, repl, content)
     return result
 
 
