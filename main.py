@@ -5,11 +5,17 @@ from typing import Iterable
 
 VBA_PATH = "example_macro/download_payload.vba"
 FIND_VAR_NAMES_REGEX = r"\s*Dim\s+\b(\w+)\b"
+FIND_STRINGS_REGEX = r'"(([^"]|"")*)"'
 
 
 def read_file(path: str) -> str:
     with open(path, "r") as f:
         return f.read()
+
+
+def get_all_strings_iter(content: str) -> Iterable[str]:
+    strings_found = re.finditer(FIND_STRINGS_REGEX, content)
+    return map(lambda v: v.group(1), strings_found)
 
 
 def get_all_variables_iter(content: str) -> Iterable[str]:
