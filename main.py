@@ -74,9 +74,9 @@ if __name__ == "__main__":
     print("Replacing variable names...")
     for var in get_all_variables_iter(vba_content):
         var_length = 7 + secrets.randbelow(16)
-    new_name = get_random_string(var_length)
-    vba_content = replace_var_name(vba_content, var, new_name)
-    print("- Replace '{}' with '{}'.".format(var, new_name))
+        new_name = get_random_string(var_length)
+        vba_content = replace_var_name(vba_content, var, new_name)
+        print("- Replace '{}' with '{}'.".format(var, new_name))
 
     print("Obfuscating strings.")
 
