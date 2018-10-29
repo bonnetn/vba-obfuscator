@@ -29,7 +29,9 @@ class CryptStrings(Modifier):
         for str_found in _get_all_strings(doc.code):
             key = get_random_string(len(str_found))
             array = _to_vba_array(_xor_crypt(str_found, key))
-            print('- Replaced "{}" by "{}".'.format(str_found, array))
+            unxor_eq = 'unxor({},"{}")'.format(array, key)
+            doc.code = re.sub(re.escape('"{}"'.format(str_found)), unxor_eq, doc.code, 1)
+            print('- Replaced "{}" by "{}".'.format(str_found, unxor_eq))
 
 
 def _get_all_strings(content: str) -> Iterable[str]:
