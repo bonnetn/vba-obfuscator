@@ -33,6 +33,8 @@ class CryptStrings(Modifier):
             doc.code = re.sub(re.escape('"{}"'.format(str_found)), unxor_eq, doc.code, 1)
             print('- Replaced "{}" by "{}".'.format(str_found, unxor_eq))
 
+        doc.code = VBA_XOR_FUNCTION + doc.code
+
 
 def _get_all_strings(content: str) -> Iterable[str]:
     strings_found = re.finditer(FIND_STRINGS_REGEX, content)
