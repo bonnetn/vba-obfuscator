@@ -22,7 +22,7 @@ class RandomizeFunctionNames(Modifier):
             if name not in FUNCTION_BLACKLIST:
                 new_name = get_random_string_of_random_length()
                 doc.code = replace_whole_word(doc.code, name, new_name)
-                LOG.debug("Replaced '{}' with '{}'.".format(name, new_name))
+                LOG.debug("Randomized '{}'.".format(name))
 
 
 def _get_function_names(content: str) -> Iterable[str]:

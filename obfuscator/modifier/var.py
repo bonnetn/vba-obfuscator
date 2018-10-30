@@ -15,7 +15,7 @@ class RandomizeVariableNames(obfuscator.modifier.base.Modifier):
         for var in _get_variable_names(doc.code):
             new_name = get_random_string_of_random_length()
             doc.code = replace_whole_word(doc.code, var, new_name)
-            LOG.debug("Replaced '{}' with '{}'.".format(var, new_name))
+            LOG.debug("Randomized '{}'.".format(var))
 
 
 def _get_variable_names(content: str) -> Iterable[str]:

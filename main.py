@@ -2,9 +2,9 @@ import logging
 
 from obfuscator.log import configure_logging
 from obfuscator.modifier.base import Pipe
-from obfuscator.modifier.crypt_strings import CryptStrings
-from obfuscator.modifier.randomize_function_names import RandomizeFunctionNames
-from obfuscator.modifier.randomize_variable_names import RandomizeVariableNames
+from obfuscator.modifier.func import RandomizeFunctionNames
+from obfuscator.modifier.strings import CryptStrings, SplitStrings
+from obfuscator.modifier.var import RandomizeVariableNames
 from obfuscator.msdocument import MSDocument
 
 VBA_PATH = "example_macro/download_payload.vba"
@@ -20,9 +20,10 @@ if __name__ == "__main__":
 
     LOG.info("Obfuscating the code...")
     Pipe(doc).run(
-        RandomizeVariableNames(),
+        SplitStrings(),
         CryptStrings(),
         RandomizeFunctionNames(),
+        RandomizeVariableNames(),
     )
 
     LOG.info("Done!")
