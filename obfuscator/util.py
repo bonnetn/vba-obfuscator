@@ -1,14 +1,14 @@
+import random
 import re
-import secrets
 import string
 
 
 def get_random_string(size: int) -> str:
-    return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(size))
+    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(size))
 
 
 def get_random_string_of_random_length() -> str:
-    var_length = 7 + secrets.randbelow(16)
+    var_length = random.randint(10, 14)
     return get_random_string(var_length)
 
 
