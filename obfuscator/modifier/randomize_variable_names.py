@@ -9,7 +9,7 @@ from obfuscator.util import get_random_string
 FIND_VAR_NAMES_REGEX = r"\s*Dim\s+\b(\w+)\b"
 
 
-class ChangeVariableNames(obfuscator.modifier.base.Modifier):
+class RandomizeVariableNames(obfuscator.modifier.base.Modifier):
     def run(self, doc: obfuscator.msdocument.MSDocument) -> None:
         print("Obfuscating variable names:")
         for var in _get_variable_names(doc.code):
