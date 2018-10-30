@@ -1,3 +1,4 @@
+import logging
 import re
 from typing import Iterable
 
@@ -5,6 +6,7 @@ from obfuscator.modifier.base import Modifier
 from obfuscator.msdocument import MSDocument
 from obfuscator.util import get_random_string
 
+LOG = logging.getLogger(__name__)
 FIND_STRINGS_REGEX = r'"((?:[^"]|"")*)"'
 VBA_XOR_FUNCTION = """
 Private Function unxor(ciphertext As Variant, key As String)
@@ -25,13 +27,12 @@ End Function
 
 class CryptStrings(Modifier):
     def run(self, doc: MSDocument) -> None:
-        print("Encrypthing strings:")
         for str_found in _get_all_strings(doc.code):
             key = get_random_string(len(str_found))
             array = _to_vba_array(_xor_crypt(str_found, key))
             unxor_eq = 'unxor({},"{}")'.format(array, key)
             doc.code = re.sub(re.escape('"{}"'.format(str_found)), unxor_eq, doc.code, 1)
-            print('- Replaced "{}" by "{}".'.format(str_found, unxor_eq))
+            LOG.debug('Replaced "{}" with "{}".'.format(str_found, unxor_eq))
 
         doc.code = VBA_XOR_FUNCTION + doc.code
 
