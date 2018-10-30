@@ -5,7 +5,7 @@ from obfuscator.modifier.base import Modifier
 from obfuscator.msdocument import MSDocument
 from obfuscator.util import get_random_string
 
-FIND_STRINGS_REGEX = r'"(([^"]|"")*)"'
+FIND_STRINGS_REGEX = r'"((?:[^"]|"")*)"'
 VBA_XOR_FUNCTION = """
 Private Function unxor(ciphertext As Variant, key As String)
     Dim cleartext As String
