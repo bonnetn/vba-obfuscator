@@ -3,9 +3,8 @@ import logging
 from obfuscator.log import configure_logging
 from obfuscator.modifier.base import Pipe
 from obfuscator.modifier.comments import StripComments
-from obfuscator.modifier.func import RandomizeFunctionNames
 from obfuscator.modifier.strings import CryptStrings, SplitStrings
-from obfuscator.modifier.var import RandomizeVariableNames
+from obfuscator.modifier.functions_vars import RandomizeNames
 from obfuscator.msdocument import MSDocument
 
 VBA_PATH = "example_macro/download_payload.vba"
@@ -23,8 +22,7 @@ if __name__ == "__main__":
     Pipe(doc).run(
         SplitStrings(),
         CryptStrings(),
-        RandomizeFunctionNames(),
-        RandomizeVariableNames(),
+        RandomizeNames(),
         StripComments(),
     )
 
