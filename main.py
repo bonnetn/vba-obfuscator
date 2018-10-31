@@ -3,6 +3,7 @@ import logging
 from obfuscator.log import configure_logging
 from obfuscator.modifier.base import Pipe
 from obfuscator.modifier.comments import StripComments
+from obfuscator.modifier.misc import RemoveEmptyLines
 from obfuscator.modifier.strings import CryptStrings, SplitStrings
 from obfuscator.modifier.functions_vars import RandomizeNames
 from obfuscator.msdocument import MSDocument
@@ -24,6 +25,7 @@ if __name__ == "__main__":
         CryptStrings(),
         RandomizeNames(),
         StripComments(),
+        RemoveEmptyLines(),
     )
 
     LOG.info("Done!")
