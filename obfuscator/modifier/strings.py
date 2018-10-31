@@ -1,8 +1,7 @@
 import base64
 import logging
 import random
-import re
-from typing import Iterable, List
+from typing import List
 
 from pygments import highlight
 from pygments.formatter import Formatter
@@ -35,14 +34,7 @@ with open("base64.vba") as f:
 
 class SplitStrings(Modifier):
     def run(self, doc: MSDocument) -> None:
-        for str_found in _get_all_strings(doc.code):
-            if len(str_found) > 8:
-                pos = _split_string(str_found)
-                splitted_string = '"{}"&"{}"'.format(str_found[:pos], str_found[pos:])
-                doc.code = re.sub(re.escape('"{}"'.format(str_found)), splitted_string, doc.code, 1)
-                LOG.debug("Splitted '{}' in two.".format(str_found))
-
-        doc.code = doc.code
+        doc.code = highlight(doc.code, VbNetLexer(), _SplitStrings())
 
 
 class CryptStrings(Modifier):
@@ -62,11 +54,6 @@ ActiveDocument.Variables.Add Name:="{}", Value:="{}"'''.format(document_var, b64
 
 def _get_random_key(n: int) -> List[int]:
     return [random.randint(0, 255) for _ in range(n)]
-
-
-def _get_all_strings(content: str) -> Iterable[str]:
-    strings_found = re.finditer(FIND_STRINGS_REGEX, content)
-    return set(map(lambda v: v.group(1), strings_found))
 
 
 def _xor(t):
@@ -143,9 +130,10 @@ class _SplitStrings(_StringFormatter):
 
     def _split_string(self, s: str) -> str:
         if len(s) > 8:
+            s = s.strip('"')
             pos = _split_string(s)
-            splitted_string = '"{}"&"{}"'.format(s[:pos], s[pos:])
-            LOG.debug("Splitted '{}' in two.".format(str_found))
+            splitted_string = '"{}" & "{}"'.format(s[:pos], s[pos:])
+            LOG.debug("Splitted '{}' in two.".format(s))
             return splitted_string
         else:
             return s
