@@ -5,6 +5,11 @@ import re
 import string
 from typing import Iterable, List
 
+from pygments import highlight
+from pygments.formatter import Formatter
+from pygments.lexers.dotnet import VbNetLexer
+from pygments.token import Token
+
 from obfuscator.modifier.base import Modifier
 from obfuscator.msdocument import MSDocument
 from obfuscator.util import get_random_string
@@ -45,30 +50,17 @@ class SplitStrings(Modifier):
 class CryptStrings(Modifier):
     def run(self, doc: MSDocument) -> None:
         LOG.debug('Generating document variable name.')
+
+        formatter = _EncryptStrings()
+        doc.code = highlight(doc.code, VbNetLexer(), formatter)
+
         document_var = get_random_string(16)
-        cryptKey = []
-
-        for str_found in _get_all_strings(doc.code):
-            LOG.debug("Generating XOR key for '{}'.".format(str_found))
-            start = len(cryptKey)
-            key = _get_random_key(len(str_found))
-            cryptKey += key
-            LOG.debug("XOR key will be at [{}; {}].".format(start, len(key)))
-
-            ciphertext = _xor_crypt(str_found, key)
-            array = _to_vba_array(ciphertext)
-            LOG.debug("Encrypted string to VBA Array -> {}.".format(array))
-
-            unxor_eq = 'unxor({},{})'.format(array, start)
-            doc.code = re.sub(re.escape('"{}"'.format(str_found)), unxor_eq, doc.code, 1)
-
-            LOG.debug("Encrypted '{}'.".format(str_found))
-
         doc.code = VBA_BASE64_FUNCTION + VBA_XOR_FUNCTION.format(document_var) + doc.code
 
-        b64 = base64.b64encode(bytes(cryptKey)).decode()
+        b64 = base64.b64encode(bytes(formatter.crypt_key)).decode()
         LOG.info('''Paste this in your VBA editor to add the Document Variable:
 ActiveDocument.Variables.Add Name:="{}", Value:="{}"'''.format(document_var, b64))
+
 
 KEY_SPACE = string.ascii_letters + string.digits + string.punctuation + " "
 KEY_SPACE = KEY_SPACE.replace('"', '')
@@ -122,3 +114,69 @@ def _split_string(s: str) -> int:
         pos = pos - 1
 
     return i
+
+
+class _StringFormatter(Formatter):
+    def __init__(self, **options):
+        super().__init__(**options)
+        self.lastval = ""
+        self.lasttype = None
+
+    def _run_on_string(self, s: str) -> str:
+        raise NotImplementedError()
+
+    def format(self, tokensource, outfile):
+        for ttype, value in tokensource:
+            if self.lasttype:
+                if self.lasttype == ttype:
+                    self.lastval += value
+                else:
+                    if self.lasttype == Token.Literal.String:
+                        outfile.write(self._run_on_string(self.lastval))
+                    else:
+                        outfile.write(self.lastval)
+                    self.lastval = value
+            else:
+                self.lastval = value
+            self.lasttype = ttype
+        outfile.write(value)
+
+
+class _SplitStrings(_StringFormatter):
+    def __init__(self):
+        super().__init__()
+        self.crypt_key = []
+
+    def _split_string(self, s: str) -> str:
+        if len(s) > 8:
+            pos = _split_string(s)
+            splitted_string = '"{}"&"{}"'.format(s[:pos], s[pos:])
+            LOG.debug("Splitted '{}' in two.".format(str_found))
+            return splitted_string
+        else:
+            return s
+
+    def _run_on_string(self, s: str):
+        return self._split_string(s)
+
+class _EncryptStrings(_StringFormatter):
+    def __init__(self):
+        super().__init__()
+        self.crypt_key = []
+
+    def _obfuscate_string(self, s: str) -> str:
+        LOG.debug("Generating XOR key for '{}'.".format(s))
+        start = len(self.crypt_key)
+        key = _get_random_key(len(s))
+        self.crypt_key += key
+        LOG.debug("XOR key will be at [{}; {}].".format(start, len(key)))
+
+        ciphertext = _xor_crypt(s, key)
+        array = _to_vba_array(ciphertext)
+        LOG.debug("Encrypted string to VBA Array -> {}.".format(array))
+
+        return 'unxor({},{})'.format(array, start)
+
+    def _run_on_string(self, s: str):
+        return self._obfuscate_string(s)
+
