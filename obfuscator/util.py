@@ -4,7 +4,7 @@ import string
 
 
 def get_random_string(size: int) -> str:
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(size))
+    return ''.join(random.choice(string.ascii_letters + "_") for _ in range(size))
 
 
 def get_random_string_of_random_length() -> str:
