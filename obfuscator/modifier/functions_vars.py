@@ -20,29 +20,34 @@ class RandomizeNames(obfuscator.modifier.base.Modifier):
 def _get_or_create(i: str, dct: dict) -> str:
     if i not in dct:
         dct[i] = get_random_string_of_random_length()
+        LOG.debug("Randomized {}.".format(i))
 
     return dct[i]
 
 
+def _blacklisted_functions(f):
+    d = {}
+    for name in f:
+        d[name] = name
+    return d
+
+
 class _RandomizeNamesFormatter(Formatter):
     def __init__(self):
-        self.func_names = {}
-        self.var_names = {}
+        self.names = _blacklisted_functions({
+            "AutoOpen", "Workbook_Open", "Shell", "Array", "LBound", "Auto_Open", "ActiveDocument", "Variables", "Chr",
+            "UBound", "Err", "Raise", "vbObjectError", "Asc", "H40", "H10", "HF", "Dim"
+        })
 
     def format(self, tokensource, outfile):
+
         for ttype, value in tokensource:
             if ttype == Token.Name.Function:
-                outfile.write(self._get_function_name(value))
+                outfile.write(self._get_name(value))
             elif ttype == Token.Name:
-                if value in self.func_names:
-                    outfile.write(self._get_function_name(value))
-                else:
-                    outfile.write(self._get_variable_name(value))
+                outfile.write(self._get_name(value))
             else:
                 outfile.write(value)
 
-    def _get_variable_name(self, name: str) -> str:
-        return _get_or_create(name, self.var_names)
-
-    def _get_function_name(self, name: str) -> str:
-        return _get_or_create(name, self.func_names)
+    def _get_name(self, name: str) -> str:
+        return _get_or_create(name, self.names)
