@@ -30,3 +30,5 @@ if __name__ == "__main__":
 
     LOG.info("Done!")
     print(doc.code)
+    with open("output.vba", "w") as f:
+        f.write(doc.code)
