@@ -2,6 +2,7 @@ import logging
 
 from obfuscator.log import configure_logging
 from obfuscator.modifier.base import Pipe
+from obfuscator.modifier.comments import StripComments
 from obfuscator.modifier.func import RandomizeFunctionNames
 from obfuscator.modifier.strings import CryptStrings, SplitStrings
 from obfuscator.modifier.var import RandomizeVariableNames
@@ -24,6 +25,7 @@ if __name__ == "__main__":
         CryptStrings(),
         RandomizeFunctionNames(),
         RandomizeVariableNames(),
+        StripComments(),
     )
 
     LOG.info("Done!")
