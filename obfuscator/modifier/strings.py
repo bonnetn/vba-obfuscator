@@ -2,7 +2,6 @@ import base64
 import logging
 import random
 import re
-import string
 from typing import Iterable, List
 
 from pygments import highlight
@@ -15,7 +14,6 @@ from obfuscator.msdocument import MSDocument
 from obfuscator.util import get_random_string
 
 LOG = logging.getLogger(__name__)
-FIND_STRINGS_REGEX = r'"((?:[^"]|"")*)"'
 VBA_XOR_FUNCTION = """
 Private Function unxor(ciphertext As Variant, start As Integer)
     Dim cleartext As String
@@ -60,10 +58,6 @@ class CryptStrings(Modifier):
         b64 = base64.b64encode(bytes(formatter.crypt_key)).decode()
         LOG.info('''Paste this in your VBA editor to add the Document Variable:
 ActiveDocument.Variables.Add Name:="{}", Value:="{}"'''.format(document_var, b64))
-
-
-KEY_SPACE = string.ascii_letters + string.digits + string.punctuation + " "
-KEY_SPACE = KEY_SPACE.replace('"', '')
 
 
 def _get_random_key(n: int) -> List[int]:
@@ -159,6 +153,7 @@ class _SplitStrings(_StringFormatter):
     def _run_on_string(self, s: str):
         return self._split_string(s)
 
+
 class _EncryptStrings(_StringFormatter):
     def __init__(self):
         super().__init__()
@@ -179,4 +174,3 @@ class _EncryptStrings(_StringFormatter):
 
     def _run_on_string(self, s: str):
         return self._obfuscate_string(s)
-
