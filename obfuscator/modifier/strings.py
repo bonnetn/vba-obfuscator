@@ -52,7 +52,7 @@ class CryptStrings(Modifier):
 
 def _get_all_strings(content: str) -> Iterable[str]:
     strings_found = re.finditer(FIND_STRINGS_REGEX, content)
-    return map(lambda v: v.group(1), strings_found)
+    return set(map(lambda v: v.group(1), strings_found))
 
 
 def _xor(t):
