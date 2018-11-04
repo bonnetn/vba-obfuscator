@@ -18,3 +18,66 @@ def replace_whole_word(content: str, var_name: str, new_name: str) -> str:
     pattern = r"\b{}\b".format(var_name)
     result = re.sub(pattern, new_name, content)
     return result
+
+
+def get_functions(code):
+    """
+    Return all functions names defined in the code.
+    :param code:
+    :return:
+    """
+    result = re.finditer("(?:Function|Sub)[ ]+(\w+)\(", code, flags=re.M)
+    result = map(lambda x: x.group(1), result)
+    result = list(result)
+
+    number_of_routines = len(re.findall("(?:End Sub|End Function)", code))
+    assert number_of_routines == len(result), "Could not find the name of all the routines"
+    return result
+
+
+def get_variables_parameters(code):
+    """
+    Return all parameters (arguments of functions) names defined in the code.
+    :param code:
+    :return:
+    """
+    var_names = re.finditer("(?:Function|Sub)[ ]+\w+\(([^\n\)]+)\)", code, flags=re.M)
+    var_names = map(lambda x: x.group(1), var_names)
+    var_names = map(extract_variables, var_names)
+
+    result = []
+    for names in var_names:
+        result += names
+
+    return result
+
+
+def get_variables_defined(code):
+    """
+    Return all variables names defined such as: "Dim MyVar..."
+    :param code:
+    :return:
+    """
+    var_names = re.finditer("^\s*.*Dim[ ]((?:\w+(?:[ ]+As[ ]+\w+)?[, ]*)+)", code, flags=re.M)
+    var_names = map(lambda x: x.group(1), var_names)
+    var_names = map(extract_variables, var_names)
+
+    result = []
+    for names in var_names:
+        result += names
+
+    return result
+
+
+def extract_variables(text):
+    text = text.split(",")
+    for i, s in enumerate(text):
+        s = s.strip()
+        s = s.split()
+        if s[0] == "ByVal":
+            s = s[1]
+        else:
+            s = s[0]
+        text[i] = s
+
+    return text

@@ -7,40 +7,35 @@ from pygments.token import Token
 
 import obfuscator.modifier.base
 import obfuscator.msdocument
-from obfuscator.util import get_random_string_of_random_length
+from obfuscator.util import get_random_string_of_random_length, get_variables_defined, get_variables_parameters, \
+    get_functions
 
 LOG = logging.getLogger(__name__)
+
+BLACKLIST_SYMBOL = {
+    "Workbook_Open", "AutoOpen", "Auto_Open"
+}
 
 
 class RandomizeNames(obfuscator.modifier.base.Modifier):
     def run(self, doc: obfuscator.msdocument.MSDocument) -> None:
-        doc.code = highlight(doc.code, VbNetLexer(), _RandomizeNamesFormatter())
+        vars = set(get_variables_defined(doc.code))
+        params = set(get_variables_parameters(doc.code))
+        functions = set(get_functions(doc.code))
 
+        names = {}
+        for symbol in vars | params | functions:
+            if symbol not in BLACKLIST_SYMBOL:
+                names[symbol] = get_random_string_of_random_length()
 
-def _get_or_create(i: str, dct: dict) -> str:
-    if i not in dct:
-        dct[i] = get_random_string_of_random_length()
-        LOG.debug("Randomized {}.".format(i))
-
-    return dct[i]
-
-
-def _blacklisted_functions(f):
-    d = {}
-    for name in f:
-        d[name] = name
-    return d
+        doc.code = highlight(doc.code, VbNetLexer(), _RandomizeNamesFormatter(names))
 
 
 class _RandomizeNamesFormatter(Formatter):
-    def __init__(self):
-        self.names = _blacklisted_functions({
-            "AutoOpen", "Workbook_Open", "Shell", "Array", "LBound", "Auto_Open", "ActiveDocument", "Variables", "Chr",
-            "UBound", "Err", "Raise", "vbObjectError", "Asc", "H40", "H10", "HF", "Dim"
-        })
+    def __init__(self, names):
+        self.names = names
 
     def format(self, tokensource, outfile):
-
         for ttype, value in tokensource:
             if ttype == Token.Name.Function:
                 outfile.write(self._get_name(value))
@@ -50,4 +45,9 @@ class _RandomizeNamesFormatter(Formatter):
                 outfile.write(value)
 
     def _get_name(self, name: str) -> str:
-        return _get_or_create(name, self.names)
+        if name in self.names:
+            LOG.debug("Replacing {} with {}.".format(name,self.names[name]))
+            return self.names[name]
+
+        LOG.debug("Ignoring {}.".format(name))
+        return name
