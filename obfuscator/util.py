@@ -59,7 +59,7 @@ def get_variables_const(code):
     :param code:
     :return:
     """
-    var_names = re.finditer("Const[ ]+(\w+)[ ]+=", code, flags=re.M)
+    var_names = re.finditer("(?:Const|Set)[ ]+(\w+)[ ]+=", code, flags=re.M)
     var_names = map(lambda x: x.group(1), var_names)
     return var_names
 
