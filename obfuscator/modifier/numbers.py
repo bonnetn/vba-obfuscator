@@ -23,7 +23,7 @@ class ReplaceIntegersWithAddition(Modifier):
 class _AdditionFormatter(Formatter):
     def format(self, tokensource, outfile):
         for ttype, value in tokensource:
-            if ttype == Token.Literal.Number.Integer:
+            if ttype == Token.Literal.Number.Integer and random.random() > .5:
                 v = int(value)
                 x = random.randint(0, v)
                 y = v - x
@@ -35,7 +35,7 @@ class _AdditionFormatter(Formatter):
 class _XorFormatter(Formatter):
     def format(self, tokensource, outfile):
         for ttype, value in tokensource:
-            if ttype == Token.Literal.Number.Integer:
+            if ttype == Token.Literal.Number.Integer and random.random() > .5:
                 v = int(value)
                 x = random.randint(0, v)
                 y = v ^ x
