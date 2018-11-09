@@ -50,6 +50,7 @@ class CryptStrings(Modifier):
         b64 = base64.b64encode(bytes(formatter.crypt_key)).decode()
         LOG.info('''Paste this in your VBA editor to add the Document Variable:
 ActiveDocument.Variables.Add Name:="{}", Value:="{}"'''.format(document_var, b64))
+        doc.doc_var[document_var] = b64
 
 
 def _get_random_key(n: int) -> List[int]:
