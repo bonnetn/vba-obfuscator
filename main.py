@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import argparse
 import logging
 
 from obfuscator.log import configure_logging
@@ -11,16 +11,19 @@ from obfuscator.modifier.numbers import ReplaceIntegersWithAddition, ReplaceInte
 from obfuscator.modifier.strings import CryptStrings, SplitStrings
 from obfuscator.msdocument import MSDocument
 
-VBA_PATH = "example_macro/download_payload.vba"
-
 if __name__ == "__main__":
     configure_logging()
 
     LOG = logging.getLogger(__name__)
     LOG.info("VBA obfuscator - Thomas LEROY & Nicolas BONNET")
 
+    parser = argparse.ArgumentParser(description='Obfuscate a VBA file.')
+    parser.add_argument('input_file', type=str, action='store',
+                        help='path of the file to obfuscate')
+    args = parser.parse_args()
+
     LOG.info("Loading the document...")
-    doc = MSDocument(VBA_PATH)
+    doc = MSDocument(args.input_file)
 
     LOG.info("Obfuscating the code...")
     Pipe(doc).run(
