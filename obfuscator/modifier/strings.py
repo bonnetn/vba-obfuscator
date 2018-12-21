@@ -110,6 +110,9 @@ def _split_string(s: str) -> int:
     return i
 
 
+IGNORED_SYMBOLS = {"Const", "Declare"}
+
+
 class _StringFormatter(Formatter):
     def __init__(self, **options):
         super().__init__(**options)
@@ -126,17 +129,17 @@ class _StringFormatter(Formatter):
                 if self.lasttype == ttype:
                     self.lastval += value
                 else:
-                    if ttype == Token.Keyword and value == "Const":  #  Skip the line if it is a const.
-                        skip_line = True
                     if "\n" in self.lastval:
                         skip_line = False
+                    if ttype == Token.Keyword and value in IGNORED_SYMBOLS:  #  Skip the line if it is a const.
+                        skip_line = True
 
                     # Crypt strings unless we are skipping the line.
                     if self.lasttype == Token.Literal.String:
                         if skip_line:
                             outfile.write(self.lastval)
                         else:
-                            outfile.write(self._run_on_string(self.lastval[1:-1]))
+                            outfile.write(self._run_on_string(self.lastval))
                     else:
                         outfile.write(self.lastval)
                     self.lastval = value
@@ -172,6 +175,7 @@ class _EncryptStrings(_StringFormatter):
         self.crypt_key = []
 
     def _obfuscate_string(self, s: str) -> str:
+        s = s[1:-1]
         LOG.debug("Generating XOR key for '{}'.".format(s))
         start = len(self.crypt_key)
         key = _get_random_key(len(s))
