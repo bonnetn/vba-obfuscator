@@ -10,10 +10,10 @@ from pygments.token import Token
 
 from obfuscator.modifier.base import Modifier
 from obfuscator.msdocument import MSDocument
-from obfuscator.util import get_random_string
+from obfuscator.util import get_random_string, split_var_declaration_from_code
 
 LOG = logging.getLogger(__name__)
-VBA_XOR_FUNCTION = """
+VBA_XOR_FUNCTION = split_var_declaration_from_code("""
 Private Function unxor(ciphertext As Variant, start As Integer)
     Dim cleartext As String
     Dim key() As Byte
@@ -26,10 +26,9 @@ Private Function unxor(ciphertext As Variant, start As Integer)
     unxor = cleartext
 
 End Function
-
-"""
+""")
 with open("base64.vba") as f:
-    VBA_BASE64_FUNCTION = f.read()
+    VBA_BASE64_FUNCTION = split_var_declaration_from_code(f.read())
 
 
 class SplitStrings(Modifier):
@@ -45,7 +44,12 @@ class CryptStrings(Modifier):
         doc.code = highlight(doc.code, VbNetLexer(), formatter)
 
         document_var = get_random_string(16)
-        doc.code = VBA_BASE64_FUNCTION + VBA_XOR_FUNCTION.format(document_var) + doc.code
+
+        code_prefix, code_suffix = split_var_declaration_from_code(doc.code)
+
+        # Merge the codes: we must keep the global variables declarations on top.
+        doc.code = code_prefix + VBA_BASE64_FUNCTION[0] + VBA_XOR_FUNCTION[0] + \
+                   code_suffix + VBA_BASE64_FUNCTION[1] + VBA_XOR_FUNCTION[1]
 
         b64 = base64.b64encode(bytes(formatter.crypt_key)).decode()
         LOG.info('''Paste this in your VBA editor to add the Document Variable:

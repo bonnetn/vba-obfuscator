@@ -93,3 +93,11 @@ def extract_variables(text):
         text[i] = s
 
     return text
+
+
+def split_var_declaration_from_code(code):
+    """ Extract the global variable declarations (prefix) at the beginning of the code from the actual code (suffix)"""
+    regex = r'(^(?:\s|.)*?\n)(.*?(?:Sub|Function)(?:\s|.)*$)'
+    match = re.match(regex, code)
+    assert len(match.groups()) == 2, "Could not find the prefix & suffix of the code"
+    return match.group(1), match.group(2)
