@@ -4,7 +4,7 @@ import sys
 
 def configure_logging():
     # create a stdout handler
-    handler = logging.StreamHandler(sys.stdout)
+    handler = logging.StreamHandler(sys.stderr)
     handler.setLevel(logging.DEBUG)
 
     # create a logging format

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import logging
+import sys
 
 from obfuscator.log import configure_logging
 from obfuscator.modifier.base import Pipe
@@ -38,7 +39,4 @@ if __name__ == "__main__":
 
     LOG.info("Done!")
 
-    print("=" * 100)
-    print(doc.code)
-    with open("output.vbs", "w") as f:
-        f.write(doc.code)
+    sys.stdout.write(doc.code)
