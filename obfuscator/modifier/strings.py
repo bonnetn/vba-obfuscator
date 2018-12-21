@@ -116,19 +116,30 @@ class _StringFormatter(Formatter):
         raise NotImplementedError()
 
     def format(self, tokensource, outfile):
+        skip_line = False
         for ttype, value in tokensource:
             if self.lasttype:
                 if self.lasttype == ttype:
                     self.lastval += value
                 else:
+                    if ttype == Token.Keyword and value == "Const":  #  Skip the line if it is a const.
+                        skip_line = True
+                    if "\n" in self.lastval:
+                        skip_line = False
+
+                    # Crypt strings unless we are skipping the line.
                     if self.lasttype == Token.Literal.String:
-                        outfile.write(self._run_on_string(self.lastval))
+                        if skip_line:
+                            outfile.write(self.lastval)
+                        else:
+                            outfile.write(self._run_on_string(self.lastval[1:-1]))
                     else:
                         outfile.write(self.lastval)
                     self.lastval = value
             else:
                 self.lastval = value
             self.lasttype = ttype
+
         outfile.write(value)
 
 
