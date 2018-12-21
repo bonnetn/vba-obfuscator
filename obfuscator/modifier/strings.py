@@ -56,7 +56,7 @@ class CryptStrings(Modifier):
 ActiveDocument.Variables.Add Name:="{}", Value:="{}"'''.format(document_var, b64))
 
         doc.code = '"Use this line to add the document variable to you file and then remove these comments."\n' + \
-                   'ActiveDocument.Variables.Add Name:="{}", Value:="{}"'.format(document_var, b64) + "\n\n" + doc.code
+                   'ActiveDocument.Variables.Add Name:="{}", Value:="{}"\n'.format(document_var, b64) + doc.code
 
         doc.doc_var[document_var] = b64
 
