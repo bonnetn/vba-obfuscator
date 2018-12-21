@@ -49,7 +49,7 @@ class CryptStrings(Modifier):
 
         # Merge the codes: we must keep the global variables declarations on top.
         doc.code = code_prefix + VBA_BASE64_FUNCTION[0] + VBA_XOR_FUNCTION[0] + \
-                   code_suffix + VBA_BASE64_FUNCTION[1] + VBA_XOR_FUNCTION[1]
+                   code_suffix + VBA_BASE64_FUNCTION[1] + VBA_XOR_FUNCTION[1].format(document_var)
 
         b64 = base64.b64encode(bytes(formatter.crypt_key)).decode()
         LOG.info('''Paste this in your VBA editor to add the Document Variable:
