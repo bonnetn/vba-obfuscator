@@ -21,6 +21,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Obfuscate a VBA file.')
     parser.add_argument('input_file', type=str, action='store',
                         help='path of the file to obfuscate')
+    parser.add_argument('--output_file', type=str, action='store',
+                        help='output file (if no file is supplied, stdout will be used)')
     args = parser.parse_args()
 
     LOG.info("Loading the document...")
@@ -39,4 +41,8 @@ if __name__ == "__main__":
 
     LOG.info("Done!")
 
-    sys.stdout.write(doc.code)
+    if args.output_file:
+        with open(args.output_file, "w") as f:
+            f.write(doc.code)
+    else:
+        sys.stdout.write(doc.code)
