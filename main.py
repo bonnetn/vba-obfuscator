@@ -40,5 +40,5 @@ if __name__ == "__main__":
 
     print("=" * 100)
     print(doc.code)
-    with open("output.vba", "w") as f:
+    with open("output.vbs", "w") as f:
         f.write(doc.code)

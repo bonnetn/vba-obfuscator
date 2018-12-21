@@ -27,7 +27,7 @@ Private Function unxor(ciphertext As Variant, start As Integer)
 
 End Function
 """)
-with open("base64.vba") as f:
+with open("base64.vbs") as f:
     VBA_BASE64_FUNCTION = split_var_declaration_from_code(f.read())
 
 
