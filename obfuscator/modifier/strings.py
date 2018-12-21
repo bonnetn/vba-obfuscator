@@ -52,11 +52,15 @@ class CryptStrings(Modifier):
                    code_suffix + VBA_BASE64_FUNCTION[1] + VBA_XOR_FUNCTION[1].format(document_var)
 
         b64 = base64.b64encode(bytes(formatter.crypt_key)).decode()
+        MAX_LENGTH = 512
+        printable_b64 = [b64[i:i + MAX_LENGTH] for i in range(0, len(b64), MAX_LENGTH)]
+        printable_b64 = '" & _\n"'.join(printable_b64)
         LOG.info('''Paste this in your VBA editor to add the Document Variable:
-ActiveDocument.Variables.Add Name:="{}", Value:="{}"'''.format(document_var, b64))
+ActiveDocument.Variables.Add Name:="{}", Value:="{}"'''.format(document_var, printable_b64))
 
         doc.code = '"Use this line to add the document variable to you file and then remove these comments."\n' + \
-                   'ActiveDocument.Variables.Add Name:="{}", Value:="{}"\n'.format(document_var, b64) + doc.code
+                   'ActiveDocument.Variables.Add Name:="{}", Value:="{}"\n'.format(document_var,
+                                                                                   printable_b64) + doc.code
 
         doc.doc_var[document_var] = b64
 
