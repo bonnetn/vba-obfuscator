@@ -26,7 +26,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     LOG.info("Loading the document...")
-    doc = MSDocument(args.input_file)
+    try:
+        doc = MSDocument(args.input_file)
+    except OSError as e:
+        LOG.error("Could not open input file: {}".format(e))
+        sys.exit(1)
 
     LOG.info("Obfuscating the code...")
     Pipe(doc).run(
@@ -42,7 +46,11 @@ if __name__ == "__main__":
     LOG.info("Done!")
 
     if args.output_file:
-        with open(args.output_file, "w") as f:
-            f.write(doc.code)
+        try:
+            with open(args.output_file, "w") as f:
+                f.write(doc.code)
+        except OSError as e:
+            LOG.error("Could not open output file: {}".format(e))
+            sys.exit(1)
     else:
         sys.stdout.write(doc.code)
