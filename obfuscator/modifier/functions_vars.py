@@ -13,7 +13,7 @@ from obfuscator.util import get_random_string_of_random_length, get_variables_de
 LOG = logging.getLogger(__name__)
 
 BLACKLIST_SYMBOL = {
-    "Workbook_Open", "AutoOpen", "Auto_Open"
+    "Workbook_Open", "AutoOpen", "Auto_Open", "Document_Open"
 }
 
 
