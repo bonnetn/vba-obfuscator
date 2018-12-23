@@ -12,10 +12,14 @@ from obfuscator.modifier.numbers import ReplaceIntegersWithAddition, ReplaceInte
 from obfuscator.modifier.strings import CryptStrings, SplitStrings
 from obfuscator.msdocument import MSDocument
 
-if __name__ == "__main__":
+
+class BadPathError(ValueError):
+    pass
+
+
+def main():
     configure_logging()
 
-    LOG = logging.getLogger(__name__)
     LOG.info("VBA obfuscator - Thomas LEROY & Nicolas BONNET")
 
     parser = argparse.ArgumentParser(description='Obfuscate a VBA file.')
@@ -29,8 +33,7 @@ if __name__ == "__main__":
     try:
         doc = MSDocument(args.input_file)
     except OSError as e:
-        LOG.error("Could not open input file: {}".format(e))
-        sys.exit(1)
+        raise BadPathError("Could not open input file") from e
 
     LOG.info("Obfuscating the code...")
     Pipe(doc).run(
@@ -50,7 +53,17 @@ if __name__ == "__main__":
             with open(args.output_file, "w") as f:
                 f.write(doc.code)
         except OSError as e:
-            LOG.error("Could not open output file: {}".format(e))
-            sys.exit(1)
+            raise BadPathError("Could not open output file") from e
     else:
         sys.stdout.write(doc.code)
+
+
+if __name__ == "__main__":
+    try:
+        LOG = logging.getLogger(__name__)
+        main()
+    except BadPathError as e:
+        LOG.error("{}: {}.".format(e.args[0], e.__cause__.args[1]))
+        sys.exit(2)
+    except KeyboardInterrupt:
+        sys.exit(1)
