@@ -29,13 +29,12 @@ def main():
                         help='output file (if no file is supplied, stdout will be used)')
     args = parser.parse_args()
 
-    LOG.info("Loading the document...")
     try:
         doc = MSDocument(args.input_file)
     except OSError as e:
         raise BadPathError("Could not open input file") from e
+    LOG.info("Loaded the code.")
 
-    LOG.info("Obfuscating the code...")
     Pipe(doc).run(
         SplitStrings(),
         CryptStrings(),
@@ -45,8 +44,7 @@ def main():
         StripComments(),
         RemoveEmptyLines(),
     )
-
-    LOG.info("Done!")
+    LOG.info("Obfuscated the code.")
 
     if args.output_file:
         try:
@@ -54,6 +52,7 @@ def main():
                 f.write(doc.code)
         except OSError as e:
             raise BadPathError("Could not open output file") from e
+        LOG.info("Wrote to file.")
     else:
         sys.stdout.write(doc.code)
 
