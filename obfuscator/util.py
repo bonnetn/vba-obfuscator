@@ -31,7 +31,6 @@ def get_functions(code):
     result = list(result)
 
     number_of_routines = len(re.findall("(?:End Sub|End Function)", code))
-    print(number_of_routines, len(result))
     assert number_of_routines <= len(result), "Could not find the name of all the routines"
     return result
 
