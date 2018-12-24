@@ -7,7 +7,7 @@ from obfuscator.log import configure_logging
 from obfuscator.modifier.base import Pipe
 from obfuscator.modifier.comments import StripComments
 from obfuscator.modifier.functions_vars import RandomizeNames
-from obfuscator.modifier.misc import RemoveEmptyLines
+from obfuscator.modifier.misc import RemoveEmptyLines, RemoveIndentation
 from obfuscator.modifier.numbers import ReplaceIntegersWithAddition, ReplaceIntegersWithXor
 from obfuscator.modifier.strings import CryptStrings, SplitStrings
 from obfuscator.msdocument import MSDocument
@@ -43,6 +43,7 @@ def main():
         ReplaceIntegersWithXor(),
         StripComments(),
         RemoveEmptyLines(),
+        RemoveIndentation(),
     )
     LOG.info("Obfuscated the code.")
 
