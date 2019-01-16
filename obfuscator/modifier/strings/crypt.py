@@ -1,4 +1,5 @@
 import base64
+import os
 import logging
 import random
 from typing import List
@@ -26,7 +27,7 @@ Private Function unxor(ciphertext As Variant, start As Integer)
 
 End Function
 """)
-with open("base64.vbs") as f:
+with open(os.path.join(os.path.dirname(__file__), "base64.vbs")) as f:
     VBA_BASE64_FUNCTION = split_var_declaration_from_code(f.read())
 
 
