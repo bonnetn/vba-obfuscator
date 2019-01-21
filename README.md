@@ -12,6 +12,12 @@ With Docker:
 cat YOUR_MACRO.vbs | docker run -i --rm bonnetn/vba-obfuscator /dev/stdin
 ```
 
+This command will obfuscate the whole code. 
+
+*Pay attention* to the first two lines! 
+It is necessary to add a document variable to the word document before pasting the code.
+You can dispose of the first two lines once it has been executed once on the Word document.
+
 ## Development setup
 
 Install python3 and the requirements.
