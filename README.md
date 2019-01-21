@@ -1,23 +1,35 @@
-# VBA Obfuscator
+# VBA obfuscator
+> Final year school project, obfuscate Word macros.
 
-This is a school project. We wanted to implement an obfuscator for VBA scripts. 
+This program obfuscates the Visual Basic code from Microsoft Word macros. 
+The transformations applied on the code allows the macros to evade signature scans from Antivirus softwares.
 
-## Run it with docker
+## Usage example
 
- If you have docker installed you can directly do:
+With Docker:
 
- > cat YOUR_MACRO.vbs | docker run -i --rm bonnetn/vba-obfuscator /dev/stdin
+```sh 
+cat YOUR_MACRO.vbs | docker run -i --rm bonnetn/vba-obfuscator /dev/stdin
+```
 
-## Run it in a python environment
+## Development setup
 
-If you do not have docker, you can install the dependencies yourself:
+Install python3 and the requirements.
 
-To launch this project you must install *pygments*.
 > pip install -r requirements.txt
+
+To run the tests:
+> pytest
 
 Then run:
 > python3 obfuscate.py YOUR_MACRO.vbs
+## Authors
+
+Thomas Leroy 
+Nicolas Bonnet – mail@nicolasbon.net
 
 ## Demo
 
 [![asciicast](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml.svg)](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml)
+
+
