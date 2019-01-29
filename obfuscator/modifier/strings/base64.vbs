@@ -92,7 +92,8 @@ Public Function Base64Decode(ByVal s As String) As Byte()
    If Not InitDone Then Init
    Dim IBuf() As Byte: IBuf = ConvertStringToBytes(s)
    Dim ILen As Long: ILen = UBound(IBuf) + 1
-   If ILen Mod 4 <> 0 Then Err.Raise vbObjectError, , "Length of Base64 encoded input string is not a multiple of 4."
+   ' If ILen Mod 4 <> 0 Then Err.Raise vbObjectError, , "Length of Base64 encoded input string is not a multiple of 4."
+   If ILen Mod 4 <> 0 Then Err.Raise vbObjectError, , ""
    Do While ILen > 0
       If IBuf(ILen - 1) <> Asc("=") Then Exit Do
       ILen = ILen - 1
@@ -108,13 +109,15 @@ Public Function Base64Decode(ByVal s As String) As Byte()
       Dim i2 As Byte: If ip < ILen Then i2 = IBuf(ip): ip = ip + 1 Else i2 = Asc("A")
       Dim i3 As Byte: If ip < ILen Then i3 = IBuf(ip): ip = ip + 1 Else i3 = Asc("A")
       If i0 > 127 Or i1 > 127 Or i2 > 127 Or i3 > 127 Then _
-         Err.Raise vbObjectError, , "Illegal character in Base64 encoded data."
+         ' Err.Raise vbObjectError, , "Illegal character in Base64 encoded data."
+         Err.Raise vbObjectError, , ""
       Dim b0 As Byte: b0 = Map2(i0)
       Dim b1 As Byte: b1 = Map2(i1)
       Dim b2 As Byte: b2 = Map2(i2)
       Dim b3 As Byte: b3 = Map2(i3)
       If b0 > 63 Or b1 > 63 Or b2 > 63 Or b3 > 63 Then _
-         Err.Raise vbObjectError, , "Illegal character in Base64 encoded data."
+         ' Err.Raise vbObjectError, , "Illegal character in Base64 encoded data."
+         Err.Raise vbObjectError, , ""
       Dim o0 As Byte: o0 = (b0 * 4) Or (b1 \ &H10)
       Dim o1 As Byte: o1 = ((b1 And &HF) * &H10) Or (b2 \ 4)
       Dim o2 As Byte: o2 = ((b2 And 3) * &H40) Or b3
