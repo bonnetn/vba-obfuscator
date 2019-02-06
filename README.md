@@ -4,6 +4,7 @@
 This program obfuscates the Visual Basic code from Microsoft Word macros. 
 The transformations applied on the code allows the macros to evade signature scans from Antivirus softwares.
 
+Please do no 
 ## Usage example
 
 With Docker:
@@ -43,3 +44,8 @@ Nicolas Bonnet – mail@nicolasbon.net
 [![asciicast](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml.svg)](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml)
 
 
+## Disclaimer
+The VBA obfuscator tool is provided for educational and research purposes only. 
+The authors of this project are no way responsible for any misuse of this tool.
+
+Do not attempt to violate the law with our project, we will not take any responsability for your actions.
