@@ -8,7 +8,7 @@ from pygments.token import Token
 from obfuscator.modifier.base import Modifier
 from obfuscator.msdocument import MSDocument
 
-MAX_LINE_WIDTH = 1023 - 3  # 1023 is the max size, and we add 3 chars : " _\n"
+MAX_LINE_WIDTH = 1000
 
 LOG = logging.getLogger(__name__)
 
