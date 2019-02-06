@@ -5,6 +5,7 @@ import sys
 
 from obfuscator.log import configure_logging
 from obfuscator.modifier.base import Pipe
+from obfuscator.modifier.break_lines_too_long import BreakLinesTooLong
 from obfuscator.modifier.comments import StripComments
 from obfuscator.modifier.functions_vars import RandomizeNames
 from obfuscator.modifier.misc import RemoveEmptyLines, RemoveIndentation
@@ -42,8 +43,9 @@ def main():
         ReplaceIntegersWithAddition(),
         ReplaceIntegersWithXor(),
         StripComments(),
-        RemoveEmptyLines(),
         RemoveIndentation(),
+        BreakLinesTooLong(),
+        RemoveEmptyLines(),
     )
     LOG.info("Obfuscated the code.")
 
