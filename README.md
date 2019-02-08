@@ -4,7 +4,6 @@
 This program obfuscates the Visual Basic code from Microsoft Word macros. 
 The transformations applied on the code allows the macros to evade signature scans from Antivirus softwares.
 
-Please do no 
 ## Usage example
 
 With Docker:
