@@ -58,5 +58,5 @@ class _BreakLinesTooLong(Formatter):
             bp1 = break_points[i]
             bp2 = break_points[i + 1]
             if bp1 < MAX_LINE_WIDTH <= bp2:
-                outfile.write(line[:bp1] + " _\n" + line[bp1:])
+                outfile.write(line[:bp1+1] + " _\n" + line[bp1+1:])
                 break
