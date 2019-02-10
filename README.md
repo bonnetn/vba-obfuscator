@@ -36,9 +36,22 @@ Thomas Leroy - thomas.leroy.mp@gmail.com
 
 Nicolas Bonnet – mail@nicolasbon.net
 
-## Demo
+## How to use (YouTube)
+> Tutorial video on how to obfuscate your macros and put them in a Word Document.
 
-[![Demo](https://img.youtube.com/vi/AEkFpD6CHCw/0.jpg)](https://www.youtube.com/watch?v=AEkFpD6CHCw)
+Click on the picture to see the video *(enable the subtitles)*.
+
+[![Demo](https://img.youtube.com/vi/L0DlPOLx2k0/0.jpg)](https://www.youtube.com/watch?v=L0DlPOLx2k0)
+
+## Proof of concept - Obfuscation & Antivirus
+
+> Antivirus signature scan evasion.
+
+Click on the picture to see the video *(enable the subtitles)*.
+
+[![Demo](https://img.youtube.com/vi/6Yk0ka5v74I/0.jpg)](https://www.youtube.com/watch?v=6Yk0ka5v74I)
+
+## Quick how to use...
 
 [![asciicast](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml.svg)](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml)
 
