@@ -40,23 +40,17 @@ class BreakLinesTooLong(Modifier):
 class _BreakLinesTooLong(Formatter):
     def format(self, tokensource, outfile):
         break_points = []
-        last_type = None
-        last_val = ''
         line = ''
         for ttype, value in tokensource:
-            if last_type != ttype or (ttype == Token.Punctuation and value in ",+&"):
-                if last_type in {Token.Punctuation}:
-                    break_points.append(len(line) - len(last_val))
-
-                last_val = ''
-                last_type = ttype
-
-            last_val += value
             line += value
+            if ttype == Token.Punctuation and value in ",+&":
+                break_points.append(len(line) - 1)
 
         for i in range(len(break_points) - 1):
             bp1 = break_points[i]
             bp2 = break_points[i + 1]
             if bp1 < MAX_LINE_WIDTH <= bp2:
-                outfile.write(line[:bp1+1] + " _\n" + line[bp1+1:])
+                before = line[:bp1+1]
+                after = line[bp1+1:]
+                outfile.write(before + " _\n" + after)
                 break
