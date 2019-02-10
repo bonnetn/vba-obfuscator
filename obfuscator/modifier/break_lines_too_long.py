@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from pygments import highlight
 from pygments.formatter import Formatter
@@ -27,30 +28,44 @@ def _split_line_if_necessary(line: str) -> str:
 class BreakLinesTooLong(Modifier):
     def run(self, doc: MSDocument) -> None:
         code = doc.code
-        prev = ""
-        while prev != code:
-            prev = code
-            lines_code = code.split("\n")
-            lines_code = map(_split_line_if_necessary, lines_code)
-            code = "\n".join(lines_code)
+
+        code = code.split("\n")
+        code = map(_split_line_if_necessary, code)
+        code = "\n".join(code)
 
         doc.code = code
 
 
+def break_line(chunks: List[str]):
+    lines = ['']
+    for chunk in chunks:
+        if len(lines[-1]) + len(chunk) < MAX_LINE_WIDTH:
+            lines[-1] += chunk
+        else:
+            lines += [chunk]
+
+    result = " _\n".join(lines)
+    return result
+
+
 class _BreakLinesTooLong(Formatter):
     def format(self, tokensource, outfile):
-        break_points = []
         line = ''
+
+        # First find out all the position where we can "cut" the string.
+        break_points = [0]
         for ttype, value in tokensource:
             line += value
             if ttype == Token.Punctuation and value in ",+&":
-                break_points.append(len(line) - 1)
+                break_points.append(len(line))
+        break_points.append(len(line))
 
+        # Cut the strings at all the previously defined positions.
+        chunks = []
         for i in range(len(break_points) - 1):
             bp1 = break_points[i]
             bp2 = break_points[i + 1]
-            if bp1 < MAX_LINE_WIDTH <= bp2:
-                before = line[:bp1+1]
-                after = line[bp1+1:]
-                outfile.write(before + " _\n" + after)
-                break
+            chunks.append(line[bp1:bp2])
+
+        # Take all theses chunks and construct lines.
+        outfile.write(break_line(chunks))
