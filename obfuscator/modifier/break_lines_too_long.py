@@ -34,6 +34,8 @@ class BreakLinesTooLong(Modifier):
             lines_code = map(_split_line_if_necessary, lines_code)
             code = "\n".join(lines_code)
 
+        doc.code = code
+
 
 class _BreakLinesTooLong(Formatter):
     def format(self, tokensource, outfile):
