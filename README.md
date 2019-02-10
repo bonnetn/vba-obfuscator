@@ -42,6 +42,10 @@ Nicolas Bonnet – mail@nicolasbon.net
 
 [![asciicast](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml.svg)](https://asciinema.org/a/5Ptyf5oNGT7xtkZZvnqNDHMml)
 
+## Project report
+
+The report of this project is available [here](https://lthomasmp.github.io/src/Report.pdf).
+It is in French, so we are sorry for people that don't speak this lovely language.
 
 ## Disclaimer
 The VBA obfuscator tool is provided for educational and research purposes only. 
