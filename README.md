@@ -57,7 +57,7 @@ Click on the picture to see the video *(enable the subtitles)*.
 
 ## Project report
 
-The report of this project is available [here](https://lthomasmp.github.io/sources/2019-02-10/Report.pdf).
+The report of this project is available [here](https://www.thole.fr/files/2019-02-10/Report.pdf).
 It is in French, so we are sorry for people that don't speak this lovely language.
 
 ## Disclaimer
