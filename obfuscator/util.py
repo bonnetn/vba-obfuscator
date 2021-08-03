@@ -69,7 +69,7 @@ def get_variables_defined(code):
     :param code:
     :return:
     """
-    var_names = re.finditer("^\s*.*(?:Dim|Private|Public)[ ]((?:\w+(?:[ ]+As[ ]+\w+)?[, ]*)+)", code, flags=re.M)
+    var_names = re.finditer("^\s*.*(?:Dim(?: Preserve)?|Private|Public)[ ]((?:\w+(?:[ ]+As[ ]+\w+)?[, ]*)+)", code, flags=re.M)
     var_names = map(lambda x: x.group(1), var_names)
     var_names = map(extract_variables, var_names)
 
